@@ -71,15 +71,16 @@ public class Game(int gridSize = 16)
         {
             int dx = enemy.Position.X - _player.Position.X;
             int dy = enemy.Position.Y - _player.Position.Y;
+            var distance = Math.Abs(dx) + Math.Abs(dy);
 
-            if (dx > 0)
-                arrowValues[Direction.Up] = Math.Min(arrowValues[Direction.Up], dx);
-            if (dx < 0)
-                arrowValues[Direction.Down] = Math.Min(arrowValues[Direction.Down], -dx);
-            if (dy < 0)
-                arrowValues[Direction.Left] = Math.Min(arrowValues[Direction.Left], -dy);
             if (dy > 0)
-                arrowValues[Direction.Right] = Math.Min(arrowValues[Direction.Right], dy);
+                arrowValues[Direction.Up] = Math.Min(arrowValues[Direction.Up], distance);
+            if (dy < 0)
+                arrowValues[Direction.Down] = Math.Min(arrowValues[Direction.Down], distance);
+            if (dx < 0)
+                arrowValues[Direction.Left] = Math.Min(arrowValues[Direction.Left], distance);
+            if (dx > 0)
+                arrowValues[Direction.Right] = Math.Min(arrowValues[Direction.Right], distance);
         }
 
         var yellow = arrowValues
