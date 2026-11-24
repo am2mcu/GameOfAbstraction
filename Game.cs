@@ -16,11 +16,19 @@ public class Game(int gridSize = 16)
         [6] = Direction.Right,
     };
 
+    private readonly Dictionary<Direction, char> ArrowMapping = new()
+    {
+        [Direction.Up] = '^',
+        [Direction.Down] = 'v',
+        [Direction.Left] = '<',
+        [Direction.Right] = '>',
+    };
+
     public void Start()
     {
         while (!IsEnemiesCollide())
         {
-            Display();
+            DisplayGame();
 
             LogEnemies();
             MoveEnemies();
@@ -38,10 +46,62 @@ public class Game(int gridSize = 16)
         DisplayEndGame();
     }
 
-    private void Display()
+    private void DisplayGame()
     {
         Console.WriteLine(_player.Position);
-        Console.WriteLine($"Seed: {_seed.Position.Offset(_player.Position)}");
+        DisplayArrows();
+        Console.WriteLine($"Seed: {_seed.Position.Offset(_player.Position)}"); // TODO: change to _seed.Distance(_player)
+    }
+
+    private void DisplayArrows()
+    {
+        Dictionary<Direction, int> arrowValues = new()
+        {
+            [Direction.Up] = int.MaxValue,
+            [Direction.Down] = int.MaxValue,
+            [Direction.Left] = int.MaxValue,
+            [Direction.Right] = int.MaxValue,
+        };
+
+        foreach (var enemy in _enemies)
+        {
+            int dx = enemy.Position.X - _player.Position.X;
+            int dy = enemy.Position.Y - _player.Position.Y;
+
+            if (dx > 0)
+                arrowValues[Direction.Up] = Math.Min(arrowValues[Direction.Up], dx);
+            if (dx < 0)
+                arrowValues[Direction.Down] = Math.Min(arrowValues[Direction.Down], -dx);
+            if (dy < 0)
+                arrowValues[Direction.Left] = Math.Min(arrowValues[Direction.Left], -dy);
+            if (dy > 0)
+                arrowValues[Direction.Right] = Math.Min(arrowValues[Direction.Right], dy);
+        }
+
+        var yellow = arrowValues
+            .Where(arrow => arrow.Value >= 10)
+            .MinBy(arrow => arrow.Value)
+            .Value;
+        foreach (var arrow in arrowValues)
+        {
+            var message = $"{ArrowMapping[arrow.Key]} ";
+            if (arrow.Value < 10)
+                ConsoleWriteColored(message, ConsoleColor.Red);
+            else if (arrow.Value == yellow && arrow.Value != int.MaxValue)
+                ConsoleWriteColored(message, ConsoleColor.Yellow);
+            else
+                ConsoleWriteColored(message, ConsoleColor.Green);
+        }
+
+        Console.WriteLine();
+    }
+
+    private void ConsoleWriteColored(string message, ConsoleColor color)
+    {
+        var previous = Console.ForegroundColor;
+        Console.ForegroundColor = color;
+        Console.Write(message);
+        Console.ForegroundColor = previous;
     }
 
     private void DisplayEndGame()
@@ -72,7 +132,7 @@ public class Game(int gridSize = 16)
         }
     }
 
-    private bool IsEnemiesCollide()
+    private bool IsEnemiesCollide() // TODO: return object of collision with Enemy stored inside, then use in DisplayEndGame
     {
         foreach (var enemy in _enemies)
         {
