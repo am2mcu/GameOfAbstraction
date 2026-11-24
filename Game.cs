@@ -2,7 +2,7 @@ public class Game(int gridSize = 16)
 {
     public int GridSize { get; } = gridSize;
     private readonly Player _player = new(new Position(0, 0));
-    private readonly Seed _seed = new(new Position(1, 1)); // TODO: randomly select it from (1,1),(1,-1),(-1,1),(-1,-1)
+    private readonly Seed _seed = new(new Position(1, 1));
     private readonly List<Enemy> _enemies =
     [
         new Chaser(new Position(0, 6)),
@@ -26,7 +26,8 @@ public class Game(int gridSize = 16)
 
     public void Start()
     {
-        while (!IsEnemiesCollide())
+        Collision collision;
+        do
         {
             DisplayGame();
 
@@ -41,9 +42,11 @@ public class Game(int gridSize = 16)
                 Console.WriteLine("You ate a seed 🎉");
                 MoveSeed();
             }
-        }
 
-        DisplayEndGame();
+            collision = IsEnemiesCollide();
+        } while (!collision.IsCollided);
+
+        DisplayEndGame(collision);
     }
 
     private void DisplayGame()
@@ -104,9 +107,9 @@ public class Game(int gridSize = 16)
         Console.ForegroundColor = previous;
     }
 
-    private void DisplayEndGame()
+    private void DisplayEndGame(Collision collision)
     {
-        Console.WriteLine("You've been caught by enemy");
+        Console.WriteLine($"You've been caught by a {collision.Enemy?.Name}");
     }
 
     private Direction GetPlayerCommand()
@@ -132,15 +135,15 @@ public class Game(int gridSize = 16)
         }
     }
 
-    private bool IsEnemiesCollide() // TODO: return object of collision with Enemy stored inside, then use in DisplayEndGame
+    private Collision IsEnemiesCollide()
     {
         foreach (var enemy in _enemies)
         {
             if (enemy.IsCollided(_player))
-                return true;
+                return new Collision(true, enemy);
         }
 
-        return false;
+        return new Collision(false, null);
     }
 
     private void MoveSeed()
