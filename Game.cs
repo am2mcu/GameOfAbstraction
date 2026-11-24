@@ -34,7 +34,7 @@ public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
         {
             DisplayGame();
 
-            LogEnemies();
+            // LogEnemies();
             MoveEnemies();
 
             var direction = GetPlayerCommand();
@@ -61,6 +61,8 @@ public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
 
     private void DisplayArrows()
     {
+        Console.Write("arrows [ ");
+
         Dictionary<Direction, int> arrowValues = new()
         {
             [Direction.Up] = int.MaxValue,
@@ -101,7 +103,7 @@ public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
                 ConsoleWriteColored(message, ConsoleColor.Green);
         }
 
-        Console.WriteLine();
+        Console.WriteLine("]");
     }
 
     private void DisplaySeedOffset()
