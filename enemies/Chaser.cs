@@ -1,4 +1,4 @@
-public class Chaser(Position position) : Enemy(position)
+public class Chaser(Position position) : Enemy("Chaser", position)
 {
     public override void MoveTowards(Position position)
     {

@@ -1,5 +1,6 @@
-public abstract class Enemy(Position position)
+public abstract class Enemy(string name, Position position)
 {
+    public string Name { get; } = name;
     public Position Position { get; } = position;
 
     public abstract void MoveTowards(Position position);
