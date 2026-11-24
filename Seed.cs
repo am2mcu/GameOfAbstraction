@@ -7,8 +7,8 @@ public class Seed(Position position)
         return Position.Equals(player.Position);
     }
 
-    public void Move(Offset offset)
+    public void Move(Position position)
     {
-        Position.ChangeByOffset(offset);
+        Position.ChangeTo(position);
     }
 }
