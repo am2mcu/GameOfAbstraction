@@ -16,7 +16,7 @@ public class Game
 
     public void Start()
     {
-        while (true)
+        while (!IsEnemiesCollide())
         {
             Display();
 
@@ -26,11 +26,18 @@ public class Game
             var direction = GetPlayerCommand();
             _player.Move(direction);
         }
+
+        DisplayEndGame();
     }
 
     private void Display()
     {
         Console.WriteLine(_player.Position);
+    }
+
+    private void DisplayEndGame()
+    {
+        Console.WriteLine("You've been caught by enemy");
     }
 
     private Direction GetPlayerCommand()
@@ -54,5 +61,16 @@ public class Game
         {
             chaser.MoveTowards(_player.Position);
         }
+    }
+
+    private bool IsEnemiesCollide()
+    {
+        foreach (var chaser in _chasers)
+        {
+            if (chaser.Position.Equals(_player.Position))
+                return true;
+        }
+
+        return false;
     }
 }
