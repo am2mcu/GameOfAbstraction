@@ -5,17 +5,10 @@ public abstract class Enemy(string name, Position position)
 
     public abstract void MoveTowards(Position position);
 
-    public bool IsCollided(Player player)
+    public bool IsCollided(IDistanceMethod distanceMethod, Position position)
     {
-        var offset = Position.Offset(player.Position);
-
-        if (offset.Dx == 0 && offset.Dy == 0)
-            return true;
-
-        if ((offset.Dx == 0 && offset.Dy == 1) || (offset.Dx == 1 && offset.Dy == 0))
-            return true;
-
-        return false;
+        var distance = Distance(distanceMethod, position);
+        return distance <= 1;
     }
 
     public int Distance(IDistanceMethod distanceMethod, Position position)
