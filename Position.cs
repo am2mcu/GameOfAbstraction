@@ -9,6 +9,12 @@ public class Position(int x, int y)
         Y += offset.Dy;
     }
 
+    public void ChangeTo(Position position)
+    {
+        X += position.X;
+        Y += position.Y;
+    }
+
     public Offset Offset(Position position)
     {
         return new Offset(Math.Abs(X - position.X), Math.Abs(Y - position.Y));
