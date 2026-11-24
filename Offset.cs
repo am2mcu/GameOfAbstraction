@@ -5,6 +5,6 @@ public class Offset(int dx, int dy)
 
     public override string ToString()
     {
-        return $"(dx: {Dx}, dy: {Dy})";
+        return $"dx {Dx} dy {Dy}";
     }
 }
