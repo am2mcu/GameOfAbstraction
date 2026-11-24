@@ -54,7 +54,7 @@ public class Game(int gridSize = 16)
     {
         Console.WriteLine(_player.Position);
         DisplayArrows();
-        Console.WriteLine($"Seed: {_seed.Distance(_player)}");
+        Console.WriteLine($"Seed: {_seed.Offset(_player)}");
     }
 
     private void DisplayArrows()
