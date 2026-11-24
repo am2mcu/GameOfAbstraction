@@ -8,6 +8,9 @@ public abstract class Enemy(Position position)
     {
         var offset = Position.Offset(player.Position);
 
+        if (offset.Dx == 0 && offset.Dy == 0)
+            return true;
+
         if ((offset.Dx == 0 && offset.Dy == 1) || (offset.Dx == 1 && offset.Dy == 0))
             return true;
 
