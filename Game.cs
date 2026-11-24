@@ -65,21 +65,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
     private void DisplayArrows()
     {
         Console.Write("arrows [ ");
-
-        var minDistances = MinDistances();
-        int minSafeDistance = minDistances
-            .Values.Where(distance => distance >= _dangerDistance)
-            .DefaultIfEmpty(int.MaxValue)
-            .Min();
-
-        foreach (var distance in minDistances)
-        {
-            ConsoleWriteColored(
-                $"{ArrowMapping[distance.Key]} ",
-                GetArrowColor(distance.Value, minSafeDistance)
-            );
-        }
-
+        ConsoleWriteArrows();
         Console.WriteLine("]");
     }
 
@@ -111,6 +97,23 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
         }
 
         return minDistances;
+    }
+
+    private void ConsoleWriteArrows()
+    {
+        var minDistances = MinDistances();
+        int minSafeDistance = minDistances
+            .Values.Where(distance => distance >= _dangerDistance)
+            .DefaultIfEmpty(int.MaxValue)
+            .Min();
+
+        foreach (var distance in minDistances)
+        {
+            ConsoleWriteColored(
+                $"{ArrowMapping[distance.Key]} ",
+                GetArrowColor(distance.Value, minSafeDistance)
+            );
+        }
     }
 
     private ConsoleColor GetArrowColor(int distance, int minSafeDistance)
