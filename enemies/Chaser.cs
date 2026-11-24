@@ -8,16 +8,16 @@ public class Chaser(Position position) : Enemy(position)
         if (dx >= dy)
         {
             if (Position.X >= position.X)
-                Position.Change(new Offset(-1, 0));
+                Position.ChangeByOffset(new Offset(-1, 0));
             else
-                Position.Change(new Offset(1, 0));
+                Position.ChangeByOffset(new Offset(1, 0));
         }
         else
         {
             if (Position.Y >= position.Y)
-                Position.Change(new Offset(0, -1));
+                Position.ChangeByOffset(new Offset(0, -1));
             else
-                Position.Change(new Offset(0, 1));
+                Position.ChangeByOffset(new Offset(0, 1));
         }
     }
 }

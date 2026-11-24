@@ -11,6 +11,6 @@ public class Player(Position position)
 
     public void Move(Direction direction)
     {
-        Position.Change(DirectionMapping[direction]);
+        Position.ChangeByOffset(DirectionMapping[direction]);
     }
 }

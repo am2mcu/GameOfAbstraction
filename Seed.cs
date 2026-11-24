@@ -9,6 +9,6 @@ public class Seed(Position position)
 
     public void Move(Offset offset)
     {
-        Position.Change(offset);
+        Position.ChangeByOffset(offset);
     }
 }
