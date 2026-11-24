@@ -49,9 +49,14 @@ public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
 
     private void DisplayGame()
     {
-        Console.WriteLine(_player.Position);
+        DisplayPlayerPosition();
         DisplayArrows();
-        Console.WriteLine($"Seed: {_seed.Offset(_player)}");
+        DisplaySeedOffset();
+    }
+
+    private void DisplayPlayerPosition()
+    {
+        Console.WriteLine($"position {_player.Position}");
     }
 
     private void DisplayArrows()
@@ -97,6 +102,11 @@ public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
         }
 
         Console.WriteLine();
+    }
+
+    private void DisplaySeedOffset()
+    {
+        Console.WriteLine($"seed {_seed.Offset(_player)}");
     }
 
     private void ConsoleWriteColored(string message, ConsoleColor color)
