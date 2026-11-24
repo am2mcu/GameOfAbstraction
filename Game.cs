@@ -38,12 +38,7 @@ public class Game(int gridSize = 16)
             var direction = GetPlayerCommand();
             _player.Move(direction);
 
-            if (_seed.CanBeEaten(_player))
-            {
-                Console.WriteLine("You ate a seed 🎉");
-                MoveSeed();
-            }
-
+            EatSeed();
             collision = IsEnemiesCollide();
         } while (!collision.IsCollided);
 
@@ -147,6 +142,15 @@ public class Game(int gridSize = 16)
         }
 
         return new Collision(false, null);
+    }
+
+    private void EatSeed()
+    {
+        if (_seed.CanBeEaten(_player))
+        {
+            Console.WriteLine("You ate a seed 🎉");
+            MoveSeed();
+        }
     }
 
     private void MoveSeed()
