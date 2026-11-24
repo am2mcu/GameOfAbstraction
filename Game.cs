@@ -1,7 +1,7 @@
 public class Game
 {
     private readonly Player _player = new(new Position(0, 0));
-    private readonly List<Chaser> _chasers =
+    private readonly List<Enemy> _enemies =
     [
         new Chaser(new Position(0, 6)),
         new Chaser(new Position(8, 6)),
@@ -49,25 +49,25 @@ public class Game
 
     private void LogEnemies()
     {
-        foreach (var chaser in _chasers)
+        foreach (var enemy in _enemies)
         {
-            Console.WriteLine(chaser.Position);
+            Console.WriteLine(enemy.Position);
         }
     }
 
     private void MoveEnemies()
     {
-        foreach (var chaser in _chasers)
+        foreach (var enemy in _enemies)
         {
-            chaser.MoveTowards(_player.Position);
+            enemy.MoveTowards(_player.Position);
         }
     }
 
     private bool IsEnemiesCollide()
     {
-        foreach (var chaser in _chasers)
+        foreach (var enemy in _enemies)
         {
-            if (chaser.Position.Equals(_player.Position))
+            if (enemy.Position.Equals(_player.Position))
                 return true;
         }
 
