@@ -66,7 +66,24 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
     {
         Console.Write("arrows [ ");
 
-        Dictionary<Direction, int> arrowValues = new()
+        var minDistances = MinDistances();
+
+        var farValues = minDistances.Where(arrow => arrow.Value >= 10).ToList();
+        int yellow = int.MaxValue;
+        if (farValues.Count != 0)
+            yellow = farValues.MinBy(arrow => arrow.Value).Value;
+
+        foreach (var arrow in minDistances)
+        {
+            ConsoleWriteColored($"{ArrowMapping[arrow.Key]} ", GetArrowColor(arrow.Value, yellow));
+        }
+
+        Console.WriteLine("]");
+    }
+
+    private Dictionary<Direction, int> MinDistances()
+    {
+        Dictionary<Direction, int> minDistances = new()
         {
             [Direction.Up] = int.MaxValue,
             [Direction.Down] = int.MaxValue,
@@ -82,26 +99,16 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
             var distance = enemy.Distance(_distanceMethod, _player.Position);
 
             if (dy > 0)
-                arrowValues[Direction.Up] = Math.Min(arrowValues[Direction.Up], distance);
+                minDistances[Direction.Up] = Math.Min(minDistances[Direction.Up], distance);
             if (dy < 0)
-                arrowValues[Direction.Down] = Math.Min(arrowValues[Direction.Down], distance);
+                minDistances[Direction.Down] = Math.Min(minDistances[Direction.Down], distance);
             if (dx < 0)
-                arrowValues[Direction.Left] = Math.Min(arrowValues[Direction.Left], distance);
+                minDistances[Direction.Left] = Math.Min(minDistances[Direction.Left], distance);
             if (dx > 0)
-                arrowValues[Direction.Right] = Math.Min(arrowValues[Direction.Right], distance);
+                minDistances[Direction.Right] = Math.Min(minDistances[Direction.Right], distance);
         }
 
-        var farValues = arrowValues.Where(arrow => arrow.Value >= 10).ToList();
-        int yellow = int.MaxValue;
-        if (farValues.Count != 0)
-            yellow = farValues.MinBy(arrow => arrow.Value).Value;
-
-        foreach (var arrow in arrowValues)
-        {
-            ConsoleWriteColored($"{ArrowMapping[arrow.Key]} ", GetArrowColor(arrow.Value, yellow));
-        }
-
-        Console.WriteLine("]");
+        return minDistances;
     }
 
     private ConsoleColor GetArrowColor(int distance, int minSafeDistance)
