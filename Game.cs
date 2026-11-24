@@ -76,7 +76,7 @@ public class Game(int gridSize = 16)
     {
         foreach (var enemy in _enemies)
         {
-            if (enemy.Position.Equals(_player.Position))
+            if (enemy.IsCollided(_player))
                 return true;
         }
 
