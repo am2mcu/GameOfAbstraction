@@ -1,6 +1,7 @@
-public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
+public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int gridSize = 16)
 {
     public int GridSize { get; } = gridSize;
+    private readonly bool _isDebug = isDebug;
     private IDistanceMethod _distanceMethod = distanceMethod;
     private readonly Player _player = new(new Position(0, 0));
     private readonly Seed _seed = new(new Position(1, 1));
@@ -34,7 +35,8 @@ public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
         {
             DisplayGame();
 
-            // LogEnemies();
+            if (_isDebug)
+                LogEnemies();
             MoveEnemies();
 
             var direction = GetPlayerCommand();
@@ -141,7 +143,7 @@ public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
     {
         foreach (var enemy in _enemies)
         {
-            Console.WriteLine(enemy.Position);
+            Console.WriteLine($"* {enemy.Name} {enemy.Position}");
         }
     }
 
