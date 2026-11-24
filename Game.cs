@@ -6,9 +6,10 @@ public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
     private readonly Seed _seed = new(new Position(1, 1));
     private readonly List<Enemy> _enemies =
     [
-        new Chaser(new Position(0, 6)),
-        new Chaser(new Position(8, 6)),
+        new Chaser(new Position(6, 0)),
+        new Chaser(new Position(6, 8)),
         new Ghost(new Position(16, 16)),
+        new Wanderer(new Position(14, 0)),
     ];
     private readonly Dictionary<int, Direction> CommandMapping = new()
     {
