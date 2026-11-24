@@ -1,2 +1,2 @@
-﻿var game = new Game();
+﻿var game = new Game(new Manhattan());
 game.Start();
