@@ -124,8 +124,14 @@ public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
 
     private Direction GetPlayerCommand()
     {
-        var input = Console.ReadLine();
-        var command = int.Parse(input ?? "");
+        int command;
+        do
+        {
+            Console.Write("Enter direction (8 2 4 6): ");
+            var input = Console.ReadLine();
+            command = int.TryParse(input, out command) ? command : -1;
+        } while (command == -1 || !CommandMapping.ContainsKey(command));
+
         return CommandMapping[command];
     }
 
