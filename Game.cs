@@ -7,6 +7,7 @@ public class Game(int gridSize = 16)
     [
         new Chaser(new Position(0, 6)),
         new Chaser(new Position(8, 6)),
+        new Ghost(new Position(16, 16)),
     ];
     private readonly Dictionary<int, Direction> CommandMapping = new()
     {
