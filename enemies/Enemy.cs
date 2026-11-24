@@ -17,4 +17,9 @@ public abstract class Enemy(string name, Position position)
 
         return false;
     }
+
+    public int Distance(IDistanceMethod distanceMethod, Position position)
+    {
+        return distanceMethod.Distance(Position, position);
+    }
 }
