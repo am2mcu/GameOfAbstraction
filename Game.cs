@@ -2,6 +2,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
 {
     public int GridSize { get; } = gridSize;
     private readonly bool _isDebug = isDebug;
+    private readonly int _dangerDistance = 10;
     private IDistanceMethod _distanceMethod = distanceMethod;
     private readonly Player _player = new(new Position(0, 0));
     private readonly Seed _seed = new(new Position(1, 1));
@@ -94,18 +95,24 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
         int yellow = int.MaxValue;
         if (farValues.Count != 0)
             yellow = farValues.MinBy(arrow => arrow.Value).Value;
+
         foreach (var arrow in arrowValues)
         {
-            var message = $"{ArrowMapping[arrow.Key]} ";
-            if (arrow.Value < 10)
-                ConsoleWriteColored(message, ConsoleColor.Red);
-            else if (arrow.Value == yellow && arrow.Value != int.MaxValue)
-                ConsoleWriteColored(message, ConsoleColor.Yellow);
-            else
-                ConsoleWriteColored(message, ConsoleColor.Green);
+            ConsoleWriteColored($"{ArrowMapping[arrow.Key]} ", GetArrowColor(arrow.Value, yellow));
         }
 
         Console.WriteLine("]");
+    }
+
+    private ConsoleColor GetArrowColor(int distance, int minSafeDistance)
+    {
+        if (distance < _dangerDistance)
+            return ConsoleColor.Red;
+
+        if (distance == minSafeDistance)
+            return ConsoleColor.Yellow;
+
+        return ConsoleColor.Green;
     }
 
     private void DisplaySeedOffset()
