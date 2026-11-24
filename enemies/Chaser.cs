@@ -1,8 +1,6 @@
-public class Chaser(Position position)
+public class Chaser(Position position) : Enemy(position)
 {
-    public Position Position { get; } = position;
-
-    public void MoveTowards(Position position)
+    public override void MoveTowards(Position position)
     {
         int dx = Math.Abs(Position.X - position.X);
         int dy = Math.Abs(Position.Y - position.Y);
