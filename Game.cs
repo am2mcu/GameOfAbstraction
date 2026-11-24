@@ -71,7 +71,8 @@ public class Game(int gridSize = 16)
         {
             int dx = enemy.Position.X - _player.Position.X;
             int dy = enemy.Position.Y - _player.Position.Y;
-            var distance = Math.Abs(dx) + Math.Abs(dy);
+
+            var distance = enemy.Distance(new Manhattan(), _player.Position);
 
             if (dy > 0)
                 arrowValues[Direction.Up] = Math.Min(arrowValues[Direction.Up], distance);
