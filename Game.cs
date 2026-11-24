@@ -1,6 +1,8 @@
-public class Game
+public class Game(int gridSize = 16)
 {
+    public int GridSize { get; } = gridSize;
     private readonly Player _player = new(new Position(0, 0));
+    private readonly Seed _seed = new(new Position(1, 1)); // TODO: randomly select it from (1,1),(1,-1),(-1,1),(-1,-1)
     private readonly List<Enemy> _enemies =
     [
         new Chaser(new Position(0, 6)),
@@ -25,6 +27,12 @@ public class Game
 
             var direction = GetPlayerCommand();
             _player.Move(direction);
+
+            if (_seed.CanBeEaten(_player))
+            {
+                Console.WriteLine("You ate a seed 🎉");
+                MoveSeed();
+            }
         }
 
         DisplayEndGame();
@@ -33,6 +41,7 @@ public class Game
     private void Display()
     {
         Console.WriteLine(_player.Position);
+        Console.WriteLine($"Seed: {_seed.Position.Offset(_player.Position)}");
     }
 
     private void DisplayEndGame()
@@ -72,5 +81,15 @@ public class Game
         }
 
         return false;
+    }
+
+    private void MoveSeed()
+    {
+        do
+        {
+            int dx = Random.Shared.Next(GridSize);
+            int dy = Random.Shared.Next(GridSize);
+            _seed.Move(new Offset(dx, dy));
+        } while (_seed.CanBeEaten(_player));
     }
 }
