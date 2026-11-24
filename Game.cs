@@ -87,9 +87,9 @@ public class Game(int gridSize = 16)
     {
         do
         {
-            int dx = Random.Shared.Next(GridSize);
-            int dy = Random.Shared.Next(GridSize);
-            _seed.Move(new Offset(dx, dy));
+            int x = Random.Shared.Next(-GridSize, GridSize);
+            int y = Random.Shared.Next(-GridSize + 1, GridSize);
+            _seed.Move(new Position(x, y));
         } while (_seed.CanBeEaten(_player));
     }
 }
