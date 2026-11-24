@@ -11,4 +11,9 @@ public class Seed(Position position)
     {
         Position.ChangeTo(position);
     }
+
+    public Offset Distance(Player player)
+    {
+        return Position.Offset(player.Position);
+    }
 }
