@@ -9,6 +9,16 @@ public class Position(int x, int y)
         Y += offset.Dy;
     }
 
+    public override bool Equals(object? obj)
+    {
+        if (obj is not Position position)
+            return false;
+
+        return X == position.X && Y == position.Y;
+    }
+
+    public override int GetHashCode() => HashCode.Combine(X, Y);
+
     public override string ToString()
     {
         return $"({X}, {Y})";
