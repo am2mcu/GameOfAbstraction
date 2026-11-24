@@ -67,15 +67,17 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
         Console.Write("arrows [ ");
 
         var minDistances = MinDistances();
+        int minSafeDistance = minDistances
+            .Values.Where(distance => distance >= _dangerDistance)
+            .DefaultIfEmpty(int.MaxValue)
+            .Min();
 
-        var farValues = minDistances.Where(arrow => arrow.Value >= 10).ToList();
-        int yellow = int.MaxValue;
-        if (farValues.Count != 0)
-            yellow = farValues.MinBy(arrow => arrow.Value).Value;
-
-        foreach (var arrow in minDistances)
+        foreach (var distance in minDistances)
         {
-            ConsoleWriteColored($"{ArrowMapping[arrow.Key]} ", GetArrowColor(arrow.Value, yellow));
+            ConsoleWriteColored(
+                $"{ArrowMapping[distance.Key]} ",
+                GetArrowColor(distance.Value, minSafeDistance)
+            );
         }
 
         Console.WriteLine("]");
