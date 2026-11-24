@@ -1,6 +1,7 @@
-public class Game(int gridSize = 16)
+public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
 {
     public int GridSize { get; } = gridSize;
+    private IDistanceMethod _distanceMethod = distanceMethod;
     private readonly Player _player = new(new Position(0, 0));
     private readonly Seed _seed = new(new Position(1, 1));
     private readonly List<Enemy> _enemies =
@@ -67,7 +68,7 @@ public class Game(int gridSize = 16)
             int dx = enemy.Position.X - _player.Position.X;
             int dy = enemy.Position.Y - _player.Position.Y;
 
-            var distance = enemy.Distance(new Manhattan(), _player.Position);
+            var distance = enemy.Distance(_distanceMethod, _player.Position);
 
             if (dy > 0)
                 arrowValues[Direction.Up] = Math.Min(arrowValues[Direction.Up], distance);
@@ -137,7 +138,7 @@ public class Game(int gridSize = 16)
     {
         foreach (var enemy in _enemies)
         {
-            if (enemy.IsCollided(_player))
+            if (enemy.IsCollided(_distanceMethod, _player.Position))
                 return new Collision(true, enemy);
         }
 
