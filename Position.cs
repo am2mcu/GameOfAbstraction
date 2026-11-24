@@ -9,6 +9,11 @@ public class Position(int x, int y)
         Y += offset.Dy;
     }
 
+    public Offset Offset(Position position)
+    {
+        return new Offset(Math.Abs(X - position.X), Math.Abs(Y - position.Y));
+    }
+
     public override bool Equals(object? obj)
     {
         if (obj is not Position position)
