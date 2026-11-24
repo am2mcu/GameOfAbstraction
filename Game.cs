@@ -81,10 +81,10 @@ public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
                 arrowValues[Direction.Right] = Math.Min(arrowValues[Direction.Right], distance);
         }
 
-        var yellow = arrowValues
-            .Where(arrow => arrow.Value >= 10)
-            .MinBy(arrow => arrow.Value)
-            .Value;
+        var farValues = arrowValues.Where(arrow => arrow.Value >= 10).ToList();
+        int yellow = int.MaxValue;
+        if (farValues.Count != 0)
+            yellow = farValues.MinBy(arrow => arrow.Value).Value;
         foreach (var arrow in arrowValues)
         {
             var message = $"{ArrowMapping[arrow.Key]} ";
