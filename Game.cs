@@ -41,9 +41,9 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
 
             EatSeed();
 
+            MoveEnemies();
             if (_isDebug)
                 LogEnemies();
-            MoveEnemies();
 
             collision = IsEnemiesCollide();
         } while (!collision.IsCollided);
