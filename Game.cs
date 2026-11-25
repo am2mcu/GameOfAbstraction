@@ -172,7 +172,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
     {
         foreach (var enemy in _enemies)
         {
-            enemy.MoveTowards(_player.Position);
+            enemy.MoveTowards(new Position(_player.Position.X, _player.Position.Y));
         }
     }
 

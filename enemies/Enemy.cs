@@ -3,7 +3,7 @@ public abstract class Enemy(string name, Position position)
     public string Name { get; } = name;
     public Position Position { get; } = position;
 
-    // FIXME: cheating child can manipulate player's position
+    // TODO: either receive a immutable Position e.g. PositionSnapshot or receive int value types e.g. int x, int y
     public abstract void MoveTowards(Position position);
 
     public bool IsCollided(IDistanceMethod distanceMethod, Position position)
