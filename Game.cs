@@ -201,8 +201,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
     {
         do
         {
-            // FIXME: make x -GridSize + 1
-            int x = Random.Shared.Next(-GridSize, GridSize);
+            int x = Random.Shared.Next(-GridSize + 1, GridSize);
             int y = Random.Shared.Next(-GridSize + 1, GridSize);
             _seed.Move(new Position(x, y));
         } while (_seed.CanBeEaten(_player));
