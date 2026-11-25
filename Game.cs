@@ -1,7 +1,7 @@
-public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int gridSize = 16)
+public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
 {
     public int GridSize { get; } = gridSize;
-    private readonly bool _isDebug = isDebug;
+    public event Action<IReadOnlyList<Enemy>>? EnemiesMoved;
     private readonly int _dangerDistance = 10;
     private IDistanceMethod _distanceMethod = distanceMethod;
     private readonly Player _player = new(new Position(0, 0));
@@ -45,8 +45,6 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
             EatSeed();
 
             MoveEnemies();
-            if (_isDebug)
-                LogEnemies();
 
             collision = IsEnemiesCollide();
         } while (!collision.IsCollided);
@@ -163,20 +161,14 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
         return CommandMapping[command];
     }
 
-    private void LogEnemies()
-    {
-        foreach (var enemy in _enemies)
-        {
-            Console.WriteLine($"* {enemy.Name} {enemy.Position}");
-        }
-    }
-
     private void MoveEnemies()
     {
         foreach (var enemy in _enemies)
         {
             enemy.MoveTowards(new Position(_player.Position.X, _player.Position.Y));
         }
+
+        EnemiesMoved?.Invoke(_enemies);
     }
 
     private Collision IsEnemiesCollide()
