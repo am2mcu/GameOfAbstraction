@@ -32,19 +32,19 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
     public void Start()
     {
         Collision collision;
-        // FIXME: Turn order must change: GetPlayerCommand -> player.Move -> EatSeed -> MoveEnemies -> IsEnemiesCollide -> Display
         do
         {
             DisplayGame();
-
-            if (_isDebug)
-                LogEnemies();
-            MoveEnemies();
 
             var direction = GetPlayerCommand();
             _player.Move(direction);
 
             EatSeed();
+
+            if (_isDebug)
+                LogEnemies();
+            MoveEnemies();
+
             collision = IsEnemiesCollide();
         } while (!collision.IsCollided);
 
