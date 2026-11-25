@@ -1,13 +1,32 @@
 public class Wanderer(Position position) : Enemy("Wanderer", position)
 {
-    private readonly int _moveRange = 1;
+    private readonly List<Direction> _directionsPattern =
+    [
+        Direction.Down,
+        Direction.Down,
+        Direction.Left,
+        Direction.Up,
+        Direction.Right,
+    ];
+    private int _currentDirectionIndex = 0;
+    private readonly Dictionary<Direction, Offset> DirectionMapping = new()
+    {
+        [Direction.Up] = new Offset(0, 1),
+        [Direction.Down] = new Offset(0, -1),
+        [Direction.Left] = new Offset(-1, 0),
+        [Direction.Right] = new Offset(1, 0),
+    };
 
-    // FIXME: define a fixed pattern instead of randomly selecting (Direction.right -> up -> right -> ...)
     public override void MoveTowards(Position position)
     {
-        int dx = Random.Shared.Next(-_moveRange, _moveRange + 1);
-        int dy = Random.Shared.Next(-_moveRange, _moveRange + 1);
+        var offset = DirectionMapping[CurrentDirection()];
+        Position.ChangeByOffset(offset);
+    }
 
-        Position.ChangeByOffset(new Offset(dx, dy));
+    private Direction CurrentDirection()
+    {
+        if (_currentDirectionIndex >= _directionsPattern.Count)
+            _currentDirectionIndex = 0;
+        return _directionsPattern[_currentDirectionIndex++];
     }
 }
