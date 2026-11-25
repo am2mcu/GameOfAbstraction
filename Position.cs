@@ -11,8 +11,8 @@ public class Position(int x, int y)
 
     public void ChangeTo(Position position)
     {
-        X += position.X;
-        Y += position.Y;
+        X = position.X;
+        Y = position.Y;
     }
 
     public Offset Offset(Position position)

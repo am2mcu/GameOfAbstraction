@@ -1,7 +1,7 @@
-public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int gridSize = 16)
+public class Game(IDistanceMethod distanceMethod, int gridSize = 16)
 {
     public int GridSize { get; } = gridSize;
-    private readonly bool _isDebug = isDebug;
+    public event Action<IReadOnlyList<Enemy>>? EnemiesMoved;
     private readonly int _dangerDistance = 10;
     private IDistanceMethod _distanceMethod = distanceMethod;
     private readonly Player _player = new(new Position(0, 0));
@@ -11,7 +11,10 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
         new Chaser(new Position(6, 0)),
         new Chaser(new Position(6, 8)),
         new Ghost(new Position(16, 16)),
-        new Wanderer(new Position(14, 0)),
+        new Wanderer(
+            new Position(14, 0),
+            [Direction.Down, Direction.Down, Direction.Left, Direction.Up, Direction.Right]
+        ),
     ];
     private readonly Dictionary<int, Direction> CommandMapping = new()
     {
@@ -36,14 +39,13 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
         {
             DisplayGame();
 
-            if (_isDebug)
-                LogEnemies();
-            MoveEnemies();
-
             var direction = GetPlayerCommand();
             _player.Move(direction);
 
             EatSeed();
+
+            MoveEnemies();
+
             collision = IsEnemiesCollide();
         } while (!collision.IsCollided);
 
@@ -84,6 +86,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
             int dx = enemy.Position.X - _player.Position.X;
             int dy = enemy.Position.Y - _player.Position.Y;
 
+            // FIXME: move distance calculation in Game since it is not an enemy responsibility
             var distance = enemy.Distance(_distanceMethod, _player.Position);
 
             if (dy > 0)
@@ -153,25 +156,19 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
             Console.Write("Enter direction (8 2 4 6): ");
             var input = Console.ReadLine();
             command = int.TryParse(input, out command) ? command : -1;
-        } while (command == -1 || !CommandMapping.ContainsKey(command));
+        } while (command == -1 || !CommandMapping.ContainsKey(command)); // TODO: simplify input handling
 
         return CommandMapping[command];
-    }
-
-    private void LogEnemies()
-    {
-        foreach (var enemy in _enemies)
-        {
-            Console.WriteLine($"* {enemy.Name} {enemy.Position}");
-        }
     }
 
     private void MoveEnemies()
     {
         foreach (var enemy in _enemies)
         {
-            enemy.MoveTowards(_player.Position);
+            enemy.MoveTowards(new Position(_player.Position.X, _player.Position.Y));
         }
+
+        EnemiesMoved?.Invoke(_enemies);
     }
 
     private Collision IsEnemiesCollide()
@@ -185,6 +182,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
         return new Collision(false, null);
     }
 
+    // FIXME: Make this an event
     private void EatSeed()
     {
         if (_seed.CanBeEaten(_player))
@@ -198,7 +196,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
     {
         do
         {
-            int x = Random.Shared.Next(-GridSize, GridSize);
+            int x = Random.Shared.Next(-GridSize + 1, GridSize);
             int y = Random.Shared.Next(-GridSize + 1, GridSize);
             _seed.Move(new Position(x, y));
         } while (_seed.CanBeEaten(_player));
