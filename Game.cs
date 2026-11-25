@@ -32,6 +32,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
     public void Start()
     {
         Collision collision;
+        // FIXME: Turn order must change: GetPlayerCommand -> player.Move -> EatSeed -> MoveEnemies -> IsEnemiesCollide -> Display
         do
         {
             DisplayGame();
@@ -84,6 +85,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
             int dx = enemy.Position.X - _player.Position.X;
             int dy = enemy.Position.Y - _player.Position.Y;
 
+            // FIXME: move distance calculation in Game since it is not an enemy responsibility
             var distance = enemy.Distance(_distanceMethod, _player.Position);
 
             if (dy > 0)
@@ -153,7 +155,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
             Console.Write("Enter direction (8 2 4 6): ");
             var input = Console.ReadLine();
             command = int.TryParse(input, out command) ? command : -1;
-        } while (command == -1 || !CommandMapping.ContainsKey(command));
+        } while (command == -1 || !CommandMapping.ContainsKey(command)); // TODO: simplify input handling
 
         return CommandMapping[command];
     }
@@ -185,6 +187,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
         return new Collision(false, null);
     }
 
+    // FIXME: Make this an event
     private void EatSeed()
     {
         if (_seed.CanBeEaten(_player))
@@ -198,6 +201,7 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
     {
         do
         {
+            // FIXME: make x -GridSize + 1
             int x = Random.Shared.Next(-GridSize, GridSize);
             int y = Random.Shared.Next(-GridSize + 1, GridSize);
             _seed.Move(new Position(x, y));

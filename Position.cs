@@ -9,6 +9,7 @@ public class Position(int x, int y)
         Y += offset.Dy;
     }
 
+    // FIXME: += -> =
     public void ChangeTo(Position position)
     {
         X += position.X;

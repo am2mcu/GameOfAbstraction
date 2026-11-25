@@ -2,6 +2,7 @@ public class Wanderer(Position position) : Enemy("Wanderer", position)
 {
     private readonly int _moveRange = 1;
 
+    // FIXME: define a fixed pattern instead of randomly selecting (Direction.right -> up -> right -> ...)
     public override void MoveTowards(Position position)
     {
         int dx = Random.Shared.Next(-_moveRange, _moveRange + 1);
