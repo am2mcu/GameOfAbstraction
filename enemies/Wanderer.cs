@@ -1,13 +1,8 @@
-public class Wanderer(Position position) : Enemy("Wanderer", position)
+public class Wanderer(Position position, List<Direction> directionsPattern)
+    : Enemy("Wanderer", position)
 {
-    private readonly List<Direction> _directionsPattern =
-    [
-        Direction.Down,
-        Direction.Down,
-        Direction.Left,
-        Direction.Up,
-        Direction.Right,
-    ];
+    private readonly List<Direction> _directionsPattern = directionsPattern;
+
     private int _currentDirectionIndex = 0;
     private readonly Dictionary<Direction, Offset> DirectionMapping = new()
     {

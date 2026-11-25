@@ -11,7 +11,10 @@ public class Game(IDistanceMethod distanceMethod, bool isDebug = false, int grid
         new Chaser(new Position(6, 0)),
         new Chaser(new Position(6, 8)),
         new Ghost(new Position(16, 16)),
-        new Wanderer(new Position(14, 0)),
+        new Wanderer(
+            new Position(14, 0),
+            [Direction.Down, Direction.Down, Direction.Left, Direction.Up, Direction.Right]
+        ),
     ];
     private readonly Dictionary<int, Direction> CommandMapping = new()
     {
